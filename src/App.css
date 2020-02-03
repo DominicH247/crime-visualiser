@@ -1,38 +1,67 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #9A9FA9;
+}
+
 .App {
   text-align: center;
+  height: 100%;
+  width: 80%;
+  margin: 0 auto;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+h1 {
+  padding: 3rem 0;
+  font-size: 3em;
+  font-family:  'Passion One', cursive;
+  letter-spacing: 8px;
+  text-transform: uppercase;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.search-form {
+  font-family:  'Passion One', cursive;
+  font-size: 1.5rem;
+  letter-spacing: 1px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.search-form input {
+  padding: 10px 5px;
+  border-radius: 10px;
+  display: block;
+  margin: 1rem auto;
+  font-size: 1rem;
 }
 
-.App-link {
-  color: #61dafb;
+.search-form input:focus {
+  outline: none;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.search-form button {
+  font-family:  'Passion One', cursive; 
+  padding: 10px 5px;
+  border-radius: 10px;
+  background-color: rgb(125, 166, 192);
+  outline: none;
+  border: 1px solid rgb(0, 0, 0);
+  font-size: 1rem;
+  letter-spacing: 1px;
+  cursor: pointer;
 }
+
+.display-name {
+  font-family:  'Passion One', cursive; 
+  letter-spacing: 1px;
+  font-weight: lighter;
+  margin: 4rem 0 2rem 0;
+}
+
+.chartjs-render-monitor {
+  color: black;
+}
+
+

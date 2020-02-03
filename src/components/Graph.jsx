@@ -1,12 +1,12 @@
 import React from "react";
-import { Doughnut } from "react-chartjs-2";
+import { Doughnut, Chart } from "react-chartjs-2";
 import * as utils from "../utils/utils";
 
 const Graph = props => {
 
   let crimeCategories = Object.keys(props.crimeData);
   let colors = utils.colorGenerator(crimeCategories);
-  
+
   const data = {
     labels: crimeCategories,
     datasets: [
@@ -18,9 +18,14 @@ const Graph = props => {
     ]
   };
 
-  return (
+  Chart.defaults.global.defaultFontColor = "black";
+ 
+  return ( 
     <div>
+      <h3 className="display-name">{props.displayName}</h3>
+      <section className="display-graph" >
       <Doughnut data={data} />
+      </section>
     </div>
   );
 };

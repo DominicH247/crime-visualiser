@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Graph from "./Graph";
 import * as key from "../config.js";
+import Axios from 'axios';
 
 class SearchBar extends Component {
   state = {
@@ -10,14 +11,14 @@ class SearchBar extends Component {
       lon: "",
       displayName: ""
     },
-    crimeData: {}
+    crimeData: {},
+    decemberCrimeLength: 0,
+    yearlyCrimeData: {}
   };
 
   handleChange = event => {
     const input = event.target.value;
-    this.setState({ searchInput: input }, () => {
-      // console.log(this.state, "CURRENT SET STATE");
-    });
+    this.setState({ searchInput: input });
   };
 
   handleSubmit = event => {
@@ -27,9 +28,6 @@ class SearchBar extends Component {
 
   fetchGeolocation = () => {
     const apiKey = key;
-
-    console.log(key);
-    // ${ this.state.searchInput }
     fetch(
       `https://eu1.locationiq.com/v1/search.php?key=${apiKey}&postalcode=${this.state.searchInput}&countrycodes=gb&format=json`
     )
@@ -37,7 +35,6 @@ class SearchBar extends Component {
         return response.json();
       })
       .then(data => {
-        console.log(data, "THE DATA");
         const { lat, lon, display_name } = data[0];
 
         this.setState(
@@ -53,6 +50,7 @@ class SearchBar extends Component {
           },
           () => {
             this.fetchCrimeData();
+            this.fetchYearlyData();
           }
         );
       });
@@ -60,28 +58,47 @@ class SearchBar extends Component {
 
   fetchCrimeData = () => {
     fetch(
-      `https://data.police.uk/api/crimes-street/all-crime?lat=52.629729&lng=-1.131592`
+      `https://data.police.uk/api/crimes-street/all-crime?lat=${this.state.searchLocation.lat}&lng=${this.state.searchLocation.lon}`
     )
       .then(response => {
         return response.json();
       })
       .then(data => {
-        console.log(data, "CRIME DATA");
 
         const crimeTally = data.reduce((tally, crime) => {
           tally[crime.category] = (tally[crime.category] || 0) + 1;
           return tally;
         }, {});
 
-        console.log(crimeTally, "Crime Tally!");
-
-        this.setState({ crimeData: crimeTally }, () => {
-          console.log(this.state, "POST CRIME FETCH");
-        });
+        this.setState({ crimeData: crimeTally, decemberCrimeLength: data.length });
       });
   };
 
+  fetchYearlyData = () => {
+    let months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11'];
+    let monthlyCount = [];
+    let promisesArr = [];
+    months.forEach(month => {
+      let req = Axios.get(`https://data.police.uk/api/crimes-street/all-crime?lat=${this.state.searchLocation.lat}&lng=${this.state.searchLocation.lon}&date=2019-${month}`, {mode: 'cors'})
+      
+      promisesArr.push(req)
+      
+    })
+    return Promise.all(promisesArr)
+    .then((res) => {
+      let mapped= res.map((obj) => {
+        monthlyCount.push(obj.data.length);
+      })
+     monthlyCount.concat(this.state.decemberCrimeLength);
+     console.log(monthlyCount);
+     
+    })
+    
+   
+  }
+
   render() {
+    const {displayName} = this.state.searchLocation
     return (
       <div className="search-container">
         <form className="search-form" onSubmit={this.handleSubmit}>
@@ -90,7 +107,7 @@ class SearchBar extends Component {
           </label>
           <button>Search</button>
         </form>
-        <Graph crimeData={this.state.crimeData} />
+        <Graph crimeData={this.state.crimeData} displayName={displayName} />
       </div>
     );
   }
