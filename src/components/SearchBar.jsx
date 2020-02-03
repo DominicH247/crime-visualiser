@@ -50,7 +50,7 @@ class SearchBar extends Component {
           },
           () => {
             this.fetchCrimeData();
-            this.fetchYearlyData();
+            
           }
         );
       });
@@ -70,12 +70,15 @@ class SearchBar extends Component {
           return tally;
         }, {});
 
-        this.setState({ crimeData: crimeTally, decemberCrimeLength: data.length });
+        this.setState({ crimeData: crimeTally, decemberCrimeLength: data.length }, () => {
+          this.fetchYearlyData();
+        });
       });
   };
 
   fetchYearlyData = () => {
     let months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11'];
+    let monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     let monthlyCount = [];
     let promisesArr = [];
     months.forEach(month => {
@@ -86,11 +89,19 @@ class SearchBar extends Component {
     })
     return Promise.all(promisesArr)
     .then((res) => {
-      let mapped= res.map((obj) => {
+       res.forEach((obj) => {
         monthlyCount.push(obj.data.length);
       })
-     monthlyCount.concat(this.state.decemberCrimeLength);
-     console.log(monthlyCount);
+      monthlyCount.push(this.state.decemberCrimeLength);
+  console.log(monthlyCount, "monthylcut");
+  
+      let reducer = monthNames.reduce((yearlyData, currentMonth, index) => {
+        yearlyData[currentMonth] = monthlyCount[index];
+        return yearlyData;
+      }, {})
+
+      console.log(reducer);
+
      
     })
     
