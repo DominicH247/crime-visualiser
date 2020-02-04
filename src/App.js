@@ -6,7 +6,7 @@ import SearchBar from "./components/SearchBar";
 function App() {
   return (
     <div className="App">
-      <header>
+      <header className="main-title">
         <Title />
       </header>
       <section>

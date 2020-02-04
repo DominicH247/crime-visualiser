@@ -5,7 +5,7 @@
 }
 
 body {
-  background-color: #9A9FA9;
+  background-color: grey;
 }
 
 .App {
@@ -13,18 +13,26 @@ body {
   height: 100%;
   width: 80%;
   margin: 0 auto;
+  border: solid;
+  background: white;
+}
+
+.main-title {
+  background-color: black;
 }
 
 h1 {
   padding: 3rem 0;
   font-size: 3em;
-  font-family:  'Passion One', cursive;
+  font-family: "Passion One", cursive;
   letter-spacing: 8px;
   text-transform: uppercase;
+  color: white;
 }
 
 .search-form {
-  font-family:  'Passion One', cursive;
+  margin-top: 50px;
+  font-family: "Passion One", cursive;
   font-size: 1.5rem;
   letter-spacing: 1px;
 }
@@ -42,7 +50,7 @@ h1 {
 }
 
 .search-form button {
-  font-family:  'Passion One', cursive; 
+  font-family: "Passion One", cursive;
   padding: 10px 5px;
   border-radius: 10px;
   background-color: rgb(125, 166, 192);
@@ -54,14 +62,48 @@ h1 {
 }
 
 .display-name {
-  font-family:  'Passion One', cursive; 
+  font-family: "Passion One", cursive;
   letter-spacing: 1px;
   font-weight: lighter;
   margin: 4rem 0 2rem 0;
+  font-size: 2em;
 }
 
 .chartjs-render-monitor {
   color: black;
 }
 
+.line-container {
+  margin-top: 50px;
+}
 
+.line-container h3 {
+  font-family: "Passion One", cursive;
+  letter-spacing: 1px;
+  font-size: 2em;
+}
+
+.display-graph {
+  width: 80%;
+  margin: 0 auto;
+  margin-bottom: 70px;
+}
+
+/* MAP SECTION */
+
+#mapid {
+  height: 700px;
+}
+
+.map-container {
+  margin-top: 50px;
+  font-family: "Passion One", cursive;
+  letter-spacing: 1px;
+}
+
+.map-container p {
+  margin-bottom: 10px;
+}
+.map-container h3 {
+  font-size: 2em;
+}
