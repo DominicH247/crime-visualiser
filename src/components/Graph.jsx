@@ -80,11 +80,14 @@ const Graph = props => {
               );
             })}
           </Map>
+     
         </div>
+        {props.yearlyDataLoaded ? 
         <div className="line-container">
           <h3>Crime count over past year</h3>
           <Line data={lineData} />
         </div>
+        : <p className="loading-text">Loading graph...</p>}
       </section>
     </div>
   );

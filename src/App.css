@@ -94,6 +94,13 @@ header p {
   margin-bottom: 70px;
 }
 
+.loading-text {
+  margin-top: 3rem;
+  font-family: "Passion One", cursive;
+  letter-spacing: 1px;
+  font-size: 2em;
+}
+
 /* MAP SECTION */
 
 #mapid {

@@ -18,7 +18,7 @@ class SearchBar extends Component {
     crimeCatColors: [],
     decemberCrimeLength: 0,
     yearlyCrimeData: {},
-    isLoading: false
+    yearlyDataLoaded: false
   };
 
   componentDidMount = () => {
@@ -124,6 +124,7 @@ class SearchBar extends Component {
     .then((res) => {
       res.forEach(obj => {        
         monthlyCount.push(obj.data.length);
+
       });
       monthlyCount.push(this.state.decemberCrimeLength);
    
@@ -132,8 +133,15 @@ class SearchBar extends Component {
         return yearlyData;
       }, {});
   
-      this.setState({ yearlyCrimeData: reducer, isLoading: false });
-    });
+      this.setState({ yearlyCrimeData: reducer, yearlyDataLoaded: true});
+    })
+    .catch((error) => {
+      if (error) {
+        alert("Error loading data. Please try again");
+        this.setState({ yearlyDataLoaded: false});
+      }
+      
+    })
   };
 
   setCrimeCatColors = () => {
@@ -144,9 +152,6 @@ class SearchBar extends Component {
 
   render() {
     const { displayName } = this.state.searchLocation;
-    if (this.state.isLoading) {
-      return <p>LOADING</p>
-    } else {
     return (
       <div className="search-container">
         <form className="search-form" onSubmit={this.handleSubmit}>
@@ -162,10 +167,10 @@ class SearchBar extends Component {
           yearlyCrimeData={this.state.yearlyCrimeData}
           crimeAreaData={this.state.crimeAreaData}
           searchLocation={this.state.searchLocation}
+          yearlyDataLoaded={this.state.yearlyDataLoaded}
         />
       </div>
     );
-    }
   }
 }
 
