@@ -58,12 +58,13 @@ header p {
   font-family: "Passion One", cursive;
   padding: 10px 5px;
   border-radius: 10px;
-  background-color: rgb(125, 166, 192);
+  background-color: rgb(243, 243, 243);
   outline: none;
   border: 1px solid rgb(0, 0, 0);
   font-size: 1rem;
   letter-spacing: 1px;
   cursor: pointer;
+  color:  rgb(223, 55, 13);
 }
 
 .display-name {
