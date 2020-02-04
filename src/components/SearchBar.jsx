@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 import Graph from "./Graph";
-import * as key from "../config.js";
-import Axios from "axios";
 import * as utils from "../utils/utils";
 import * as api from "../api";
 
