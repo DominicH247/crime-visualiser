@@ -156,7 +156,7 @@ class SearchBar extends Component {
       <div className="search-container">
         <form className="search-form" onSubmit={this.handleSubmit}>
           <label>
-            Post Code: <input type="text" onChange={this.handleChange} />
+            Postcode: <input type="text" onChange={this.handleChange} placeholder="Please enter your postcode"/>
           </label>
           <button>Search</button>
         </form>
