@@ -11,14 +11,40 @@ class SearchBar extends Component {
     searchLocation: {
       lat: "",
       lon: "",
-      displayName: ""
+      displayName: "Your location"
     },
     crimeData: {},
     crimeAreaData: [],
     crimeCatColors: [],
     decemberCrimeLength: 0,
-    yearlyCrimeData: {}
+    yearlyCrimeData: {},
+    isLoading: false
   };
+
+  componentDidMount = () => {
+    this.getBrowserLocation(); 
+  }
+
+  getBrowserLocation = () => {
+    let browserPosition = [];
+
+    const showPosition = (position) => {
+      let long = position.coords.longitude;
+      let lat = position.coords.latitude;      
+      browserPosition.push(lat, long);
+      this.setState((currentState) => {
+        return {searchLocation: { ...currentState.searchLocation, lat: browserPosition[0], lon: browserPosition[1]}}
+      }, () => {
+        this.fetchCrimeData();  
+      })
+    }
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+      alert("This site needs access to your browser location")
+    }
+  }
 
   handleChange = event => {
     const input = event.target.value;
@@ -31,88 +57,54 @@ class SearchBar extends Component {
   };
 
   fetchGeolocation = () => {
-    const data = api.getGeoLocation(this.state.searchInput).then(data => {
-      console.log(data);
+    api.getGeoLocation(this.state.searchInput)
+    .then(data => {
+      const { lat, lon, display_name } = data[0];
+      this.setState(
+        currentState => {
+          return {
+            searchLocation: {
+              ...currentState.searchLocation,
+              lat,
+              lon,
+              displayName: display_name
+            }
+          };
+        },
+        () => {
+          this.fetchCrimeData();
+        }
+      );
     });
-    // const { lat, lon, display_name } = data[0];
-
-    //set state here
-
-    // const apiKey = key;
-    // fetch(
-    //   `https://eu1.locationiq.com/v1/search.php?key=${apiKey}&postalcode=${this.state.searchInput}&countrycodes=gb&format=json`
-    // )
-    //   .then(response => {
-    //     return response.json();
-    //   })
-    //   .then(data => {
-    //     const { lat, lon, display_name } = data[0];
-
-    //     this.setState(
-    //       currentState => {
-    //         return {
-    //           searchLocation: {
-    //             ...currentState.searchLocation,
-    //             lat,
-    //             lon,
-    //             displayName: display_name
-    //           }
-    //         };
-    //       },
-    //       () => {
-    //         this.fetchCrimeData();
-    //       }
-    //     );
-    //   });
   };
 
   fetchCrimeData = () => {
-    fetch(
-      `https://data.police.uk/api/crimes-street/all-crime?lat=${this.state.searchLocation.lat}&lng=${this.state.searchLocation.lon}`
-    )
-      .then(response => {
-        return response.json();
-      })
-      .then(data => {
-        const crimeTally = data.reduce((tally, crime) => {
-          tally[crime.category] = (tally[crime.category] || 0) + 1;
-          return tally;
-        }, {});
-
-        console.log(data, "CRIME DATA");
-
-        const crimeAreaData = data.map(({ category, location }) => {
-          return { category, location };
-        });
-
-        this.setState(
-          {
-            crimeData: crimeTally,
-            decemberCrimeLength: data.length,
-            crimeAreaData
-          },
-          () => {
-            this.fetchYearlyData();
-            this.setCrimeCatColors();
-          }
-        );
+    api.getCrimeData(this.state.searchLocation)
+    .then((data) => {
+      const crimeTally = data.reduce((tally, crime) => {
+        tally[crime.category] = (tally[crime.category] || 0) + 1;
+        return tally;
+      }, {});
+  
+      const crimeAreaData = data.map(({ category, location, id }) => {
+        return { category, location, id };
       });
+  
+      this.setState(
+        {
+          crimeData: crimeTally,
+          decemberCrimeLength: data.length,
+          crimeAreaData
+        },
+        () => {
+          this.fetchYearlyData();
+          this.setCrimeCatColors();
+        }
+      );
+    })
   };
 
   fetchYearlyData = () => {
-    let months = [
-      "01",
-      "02",
-      "03",
-      "04",
-      "05",
-      "06",
-      "07",
-      "08",
-      "09",
-      "10",
-      "11"
-    ];
     let monthNames = [
       "Jan",
       "Feb",
@@ -128,30 +120,19 @@ class SearchBar extends Component {
       "Dec"
     ];
     let monthlyCount = [];
-    let promisesArr = [];
-    months.forEach(month => {
-      let req = Axios.get(
-        `https://data.police.uk/api/crimes-street/all-crime?lat=${this.state.searchLocation.lat}&lng=${this.state.searchLocation.lon}&date=2019-${month}`,
-        { mode: "cors" }
-      );
-
-      promisesArr.push(req);
-    });
-    return Promise.all(promisesArr).then(res => {
-      res.forEach(obj => {
+    api.getYearlyData(this.state.searchLocation)
+    .then((res) => {
+      res.forEach(obj => {        
         monthlyCount.push(obj.data.length);
       });
       monthlyCount.push(this.state.decemberCrimeLength);
-      console.log(monthlyCount, "monthylcut");
-
+   
       let reducer = monthNames.reduce((yearlyData, currentMonth, index) => {
         yearlyData[currentMonth] = monthlyCount[index];
         return yearlyData;
       }, {});
-
-      this.setState({ yearlyCrimeData: reducer }, () => {
-        console.log(this.state);
-      });
+  
+      this.setState({ yearlyCrimeData: reducer, isLoading: false });
     });
   };
 
@@ -163,6 +144,9 @@ class SearchBar extends Component {
 
   render() {
     const { displayName } = this.state.searchLocation;
+    if (this.state.isLoading) {
+      return <p>LOADING</p>
+    } else {
     return (
       <div className="search-container">
         <form className="search-form" onSubmit={this.handleSubmit}>
@@ -181,6 +165,7 @@ class SearchBar extends Component {
         />
       </div>
     );
+    }
   }
 }
 

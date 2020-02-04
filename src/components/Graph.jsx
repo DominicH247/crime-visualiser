@@ -74,7 +74,7 @@ const Graph = props => {
               ];
 
               return (
-                <Marker position={position}>
+                <Marker key={crime.id} position={position}>
                   <Popup>Crime category: {crime.category}</Popup>
                 </Marker>
               );

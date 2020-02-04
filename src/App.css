@@ -21,13 +21,18 @@ body {
   background-color: black;
 }
 
-h1 {
-  padding: 3rem 0;
+header h1 {
+  padding: 3rem 0 2rem 0;
   font-size: 3em;
   font-family: "Passion One", cursive;
   letter-spacing: 8px;
   text-transform: uppercase;
   color: white;
+}
+
+header p {
+  color: white;
+  padding-bottom: 1rem;
 }
 
 .search-form {
