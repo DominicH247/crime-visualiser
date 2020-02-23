@@ -2,6 +2,7 @@ import React from "react";
 import "./App.css";
 import Title from "./components/Title";
 import SearchBar from "./components/SearchBar";
+import Footer from "./components/Footer";
 
 function App() {
   return (
@@ -12,6 +13,9 @@ function App() {
       <section>
         <SearchBar />
       </section>
+      <footer>
+        <Footer />
+      </footer>
     </div>
   );
 }

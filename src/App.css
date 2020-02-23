@@ -74,7 +74,7 @@ header p {
   font-size: 1rem;
   letter-spacing: 1px;
   cursor: pointer;
-  color:  rgb(223, 55, 13);
+  color: rgb(223, 55, 13);
 }
 
 .display-name {
@@ -129,4 +129,8 @@ header p {
 }
 .map-container h3 {
   font-size: 2em;
+}
+
+.footer-text {
+  font-family: "Passion One", cursive;
 }

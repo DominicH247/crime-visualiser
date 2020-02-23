@@ -5,22 +5,20 @@ const getGeoLocation = searchInput => {
   const apiKey = key;
   return Axios.get(
     `https://eu1.locationiq.com/v1/search.php?key=${apiKey}&postalcode=${searchInput}&countrycodes=gb&format=json`
-  )
-  .then(({data}) => {
-      return data;
-    });
+  ).then(({ data }) => {
+    return data;
+  });
 };
 
-const getCrimeData = (searchLocation) => {
+const getCrimeData = searchLocation => {
   return Axios.get(
     `https://data.police.uk/api/crimes-street/all-crime?lat=${searchLocation.lat}&lng=${searchLocation.lon}`
-  )
-  .then(({data}) => {
-      return data;
-    });
-}
+  ).then(({ data }) => {
+    return data;
+  });
+};
 
-const getYearlyData = (searchLocation) => {
+const getYearlyData = searchLocation => {
   let months = [
     "01",
     "02",
@@ -45,6 +43,6 @@ const getYearlyData = (searchLocation) => {
     promisesArr.push(req);
   });
   return Promise.all(promisesArr);
-}
+};
 
 module.exports = { getGeoLocation, getCrimeData, getYearlyData };
