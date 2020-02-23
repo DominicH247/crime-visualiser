@@ -1,4 +1,4 @@
-const key = require("./config.js");
+const key = process.env.REACT_APP_LOCATION_API_KEY;
 const Axios = require("axios");
 
 const getGeoLocation = searchInput => {
